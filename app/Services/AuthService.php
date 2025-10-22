@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
@@ -13,6 +14,12 @@ class AuthService
 
     public function register(array $data): User
     {
+        $current = Auth::user();
+
+        if (!$current || !$current->hasRole('admin')) {
+            $data['role'] = 'user';
+        }
+
         return $this->userRepository->create($data);
     }
 
