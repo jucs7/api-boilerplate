@@ -52,7 +52,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         if (Auth::user()->cannot('delete', $category)) {
-            abort(403);
+            abort(403, 'Forbidden: You do not have the necessary permissions to access this resource.');
         }
 
         if ($this->service->delete($category)) {
